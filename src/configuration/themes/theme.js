@@ -1,41 +1,21 @@
 import { createTheme } from "@mui/material/styles";
 
-export const FONT_PRIMARY = "Poppins";
-
 export const themeOptions = {
   palette: {
     type: "light",
     primary: {
-      main: "#EE545A",
+      main: "#ED545A",
     },
     secondary: {
-      main: "#006168",
-      light: "#8fb783",
-      dark: "#1e1e1e",
+      main: "#026068",
     },
     text: {
-      secondary: "#022b3a",
-    },
-    info: {
-      main: "#87ceeb",
+      primary: "#026068",
     },
   },
   typography: {
-    fontFamily: FONT_PRIMARY,
+    fontFamily: "Lora",
     fontSize: 16,
-    h1: {
-      fontSize: "5.3rem",
-      fontWeight: 400,
-      fontFamily: FONT_PRIMARY,
-    },
-    h2: {
-      fontSize: "3.5rem",
-      fontFamily: FONT_PRIMARY,
-    },
-    h3: {
-      fontSize: "3rem",
-      fontFamily: FONT_PRIMARY,
-    },
   },
   props: {
     MuiTooltip: {

@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 
 export default function ContainerCard({ id }) {
   return (
-    <Box sx={{ minWidth: 275, marginBottom: "2rem" }}>
+    <Box sx={{ width: "100%", height: "100%" }}>
       <Card variant="outlined">
         <React.Fragment>
           <CardContent>

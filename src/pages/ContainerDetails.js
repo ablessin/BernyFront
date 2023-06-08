@@ -1,15 +1,15 @@
-import * as React from "react";
-import { Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
-import { styled } from "@mui/material/styles";
+import { gql, useQuery } from "@apollo/client";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Alert, CircularProgress, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import * as React from "react";
+import { useParams } from "react-router-dom";
 
 //GET ITEM
 const GET_CONTAINER_BY_PK = gql`
@@ -130,12 +130,12 @@ export default function ContainerDetails() {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Erreur: {error.message}</Alert>;
   console.log(data);
 
   return (
-    <Card sx={{ width: "50%", margin: "0 auto" }}>
+    <Card>
       <CardHeader title="Bac Berny" subheader={`Bac n°${id}`} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">

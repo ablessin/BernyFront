@@ -4,10 +4,11 @@ import { useQuery, gql } from "@apollo/client";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import ContainerCard from "../components/containers/ContainerCard";
+import { Alert, CircularProgress, Grid } from "@mui/material";
 
 // Nombre total de conteneur dans la db, ou est le count ??
 
-const LIMIT = 5;
+const LIMIT = 8;
 
 //GET ITEM ET NON PAS CONTAINER ??
 const GET_CONTAINERS_LIST = gql`
@@ -60,25 +61,31 @@ export default function Containers() {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Erreur: {error.message}</Alert>;
 
   const TOTAL = data.Item_aggregate.aggregate.count;
   console.log(data);
   return (
-    <Box sx={{ width: "80%", margin: "0 auto" }}>
-      <Box sx={{ width: "50%", margin: "0 auto" }}>
+    <Box sx={{ width: "80%", margin: "0 auto", marginTop: "3rem" }}>
+      <Grid container spacing={1}>
         {data.Item.map((container) => (
-          <ContainerCard {...container} sx={{ marginBottom: "2rem" }} />
+          <Grid item xs={12} sm={6} key={container.id}>
+            <ContainerCard {...container} />
+          </Grid>
         ))}
-        <Stack spacing={2}>
-          <Pagination
-            count={Math.ceil(TOTAL / LIMIT)}
-            page={page}
-            onChange={handleChange}
-            color="secondary"
-          />
-        </Stack>
+      </Grid>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
+      >
+        <Pagination
+          count={Math.ceil(TOTAL / LIMIT)}
+          page={page}
+          onChange={handleChange}
+          color="secondary"
+          variant="outlined"
+          shape="rounded"
+        />
       </Box>
     </Box>
   );

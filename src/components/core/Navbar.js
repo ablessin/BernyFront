@@ -1,16 +1,19 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import * as React from "react";
 import { NavLink } from "react-router-dom";
+import BernyLogo from "../../assets/logo.png";
 
-const pages = [{ label: "Conteneurs", link: "/containers" }];
+const pages = [
+  { label: "Dashboard", link: "/" },
+  { label: "Conteneurs", link: "/containers" },
+];
 
 function Navbar() {
   return (
-    <AppBar position="static" sx={{ marginBottom: "2rem" }}>
+    <AppBar position="static" sx={{ marginBottom: "2rem" }} color="transparent">
       <Container
         sx={{
           width: "80%",
@@ -19,41 +22,25 @@ function Navbar() {
           padding: "0 !important",
         }}
       >
-        <Toolbar disableGutters>
-          <Typography
-            variant="h4"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 5,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 900,
-              letterSpacing: ".15rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Berny
-          </Typography>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Box>
+            <img src={BernyLogo} alt="Berny Logo" style={{ height: "56px" }} />
+          </Box>
           <Box
             sx={{
-              flexGrow: 1,
-              display: { xs: "none", md: "flex" },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              "& > *": {
+                marginLeft: "1rem",
+                color: "#026068",
+                fontWeight: "bold",
+                textDecoration: "none !important",
+              },
             }}
           >
-            {pages.map((page) => (
-              <NavLink
-                to={page.link}
-                key={page.label}
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  textDecoration: "none !important",
-                }}
-              >
+            {pages.map((page, index) => (
+              <NavLink to={page.link} key={page.label}>
                 {page.label}
               </NavLink>
             ))}
@@ -63,4 +50,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;
