@@ -5,20 +5,103 @@ import { useQuery, gql } from "@apollo/client";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import logo from "../assets/logo.png";
 
+//GET ITEM
 const GET_CONTAINER_BY_PK = gql`
-  query GetContainerByPK($id: String!) {
-    Container_by_pk(id: $id) {
+  query MyQuery {
+    Item_by_pk(id: "0P0MjPwO") {
+      arrival_date
+      arrival_country
       id
-      status
-      choosen_size
+      in_transit
+      is_defunct
+      Cleanings {
+        cleaner
+        cleaning_date
+        id
+        Cleaner {
+          enterprise
+        }
+      }
+      Delivery_backs_aggregate {
+        aggregate {
+          count
+        }
+      }
+      Delivery_backs {
+        id
+        actor
+        shop
+        shop_end
+        lot
+        is_unsold
+        Shop {
+          brand
+          departement
+          deploymentDate
+          id
+          isShop
+          taux
+          tarifDeploiement
+          tauxWithoutUnsold
+        }
+      }
+      Deliveries {
+        delivery_date
+        id
+        shop
+        Shop {
+          brand
+          departement
+          deploymentDate
+          isShop
+          prixGrand
+          prixPetit
+          name
+          taux
+          tauxWithoutUnsold
+          tarifDeploiement
+        }
+      }
+      Deliveries_aggregate {
+        aggregate {
+          count
+        }
+      }
+      Format {
+        width
+        weight
+        name
+        capacity
+        depth
+        length
+      }
+      size
+      type
+      receipts {
+        id
+        receiptDate
+        receiver
+        shop
+        transportedIn
+        Shop {
+          brand
+          departement
+          deploymentDate
+          isShop
+          name
+          prixGrand
+          prixPetit
+          taux
+          tarifDeploiement
+          tauxWithoutUnsold
+        }
+      }
     }
   }
 `;
@@ -74,18 +157,6 @@ export default function ContainerDetails() {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Détails du conteneur :</Typography>
-          <Typography paragraph>
-            Status du conteneur :
-            {data.Container_by_pk.status
-              ? data.Container_by_pk.status
-              : "Le status n'est pas mentionnée"}
-          </Typography>
-          <Typography paragraph>
-            Taille du conteneur :
-            {data.Container_by_pk.choosen_size
-              ? data.Container_by_pk.choosen_size
-              : "La taille n'est pas mentionnée"}
-          </Typography>
         </CardContent>
       </Collapse>
     </Card>
