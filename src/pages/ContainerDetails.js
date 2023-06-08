@@ -10,17 +10,39 @@ import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import * as React from "react";
 import { useParams } from "react-router-dom";
+import ActivityChart from "../components/charts/ActivityChart";
+import { Box } from "@mui/system";
+
+function countDates(timestamps) {
+  const dateMap = new Map();
+
+  // Conversion des timestamps en objets Date
+  const dates = timestamps.map((timestamp) => new Date(timestamp));
+
+  // Comptage du nombre de fois que chaque date apparaît
+  for (const date of dates) {
+    const dateString = date.toISOString().split("T")[0]; // Récupération de la date sans l'heure
+    const count = dateMap.get(dateString) || 0; // Récupération du compteur actuel pour la date
+
+    dateMap.set(dateString, count + 1); // Mise à jour du compteur
+  }
+
+  // Création du nouveau tableau à partir de l'objet Map
+  const result = Array.from(dateMap, ([date, count]) => ({ date, count }));
+
+  return result;
+}
 
 //GET ITEM
 const GET_CONTAINER_BY_PK = gql`
-  query MyQuery {
-    Item_by_pk(id: "0P0MjPwO") {
+  query MyQuery($id: String!) {
+    Item_by_pk(id: $id) {
       arrival_date
       arrival_country
       id
       in_transit
       is_defunct
-      Cleanings {
+      Cleanings(order_by: { cleaning_date: asc }) {
         cleaner
         cleaning_date
         id
@@ -33,7 +55,7 @@ const GET_CONTAINER_BY_PK = gql`
           count
         }
       }
-      Delivery_backs {
+      Delivery_backs(order_by: { date: asc }) {
         id
         actor
         shop
@@ -51,7 +73,7 @@ const GET_CONTAINER_BY_PK = gql`
           tauxWithoutUnsold
         }
       }
-      Deliveries {
+      Deliveries(order_by: { delivery_date: asc }) {
         delivery_date
         id
         shop
@@ -134,8 +156,28 @@ export default function ContainerDetails() {
   if (error) return <Alert severity="error">Erreur: {error.message}</Alert>;
   console.log(data);
 
+  // Data for chart
+
+  const deliveriesLabelsChart = data.Item_by_pk?.Deliveries.map(
+    (delivery) => delivery?.delivery_date
+  );
+
+  const chartDataDeliveries = countDates(deliveriesLabelsChart);
+
+  const cleaningsLabelsChart = data.Item_by_pk?.Cleanings.map(
+    (cleaning) => cleaning?.cleaning_date
+  );
+
+  const chartDataCleanings = countDates(cleaningsLabelsChart);
+
+  const DeliveriesBackLabelsChart = data.Item_by_pk?.Delivery_backs.map(
+    (DeliveriesBack) => DeliveriesBack?.date
+  );
+
+  const chartDataDeliveriesBack = countDates(DeliveriesBackLabelsChart);
+
   return (
-    <Card>
+    <Card sx={{ width: "80%", margin: "0 auto", padding: "1rem" }}>
       <CardHeader title="Bac Berny" subheader={`Bac n°${id}`} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -158,6 +200,13 @@ export default function ContainerDetails() {
         <CardContent>
           <Typography paragraph>Détails du conteneur :</Typography>
         </CardContent>
+        <Box sx={{ width: 600 }}>
+          <ActivityChart
+            chartDataDeliveries={chartDataDeliveries}
+            chartDataCleanings={chartDataCleanings}
+            chartDataDeliveriesBack={chartDataDeliveriesBack}
+          />
+        </Box>
       </Collapse>
     </Card>
   );
