@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 export default function Home() {
   return (
     <Box>
-      <Typography variant="h2"> Bienvenu chez Berny</Typography>
+      <Typography variant="h2"> Bienvenue chez Berny</Typography>
     </Box>
   );
 }
